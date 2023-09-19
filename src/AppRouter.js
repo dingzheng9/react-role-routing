@@ -6,7 +6,7 @@ import Manager from './components/Manager';
 import Welcome from './components/Welcome';
 import { getUserInfoFromToken } from './utils/authUtils';
 import { ROLES, URL_PATH } from './configs/constants';
-
+import { LanguageProvider } from  './helpers/LanguageContext';
 
 function AppRouter() {
   const [userInfo, setUserInfo] = useState(null);
@@ -19,14 +19,16 @@ function AppRouter() {
   }, []);
 
   return (
-    <Routes>
-      <Route path= {URL_PATH.LOGIN} element={<Login />} />
-      <Route path={URL_PATH.MANAGER} element={<PrivateRoute element={<Manager />} 
-      allowedRoles={[ROLES.MANAGER]} userRole={userInfo ? userInfo.role : null}/>} />
-      <Route path={URL_PATH.WELCOME} element={<PrivateRoute element={<Welcome />} 
-      allowedRoles={[ROLES.MANAGER, ROLES.USER]} userRole={userInfo ? userInfo.role : null}/>} />
-      <Route path="*" element={<Navigate to={URL_PATH.LOGIN} />} />
-    </Routes>
+    <LanguageProvider>
+      <Routes>
+        <Route path= {URL_PATH.LOGIN} element={<Login />} />
+        <Route path={URL_PATH.MANAGER} element={<PrivateRoute element={<Manager />} 
+        allowedRoles={[ROLES.MANAGER]} userRole={userInfo ? userInfo.role : null}/>} />
+        <Route path={URL_PATH.WELCOME} element={<PrivateRoute element={<Welcome />} 
+        allowedRoles={[ROLES.MANAGER, ROLES.USER]} userRole={userInfo ? userInfo.role : null}/>} />
+        <Route path="*" element={<Navigate to={URL_PATH.LOGIN} />} />
+      </Routes>
+    </LanguageProvider>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import axios from 'axios';
@@ -7,16 +7,20 @@ import {
    BACKEND_API_BASE_URL,
    AUTHENTICATION_ENDPOINT,
    INVALID_CREDENTIALS_ERROR,
-   GENERIC_ERROR 
+   GENERIC_ERROR,
+   TRANSLATIONS, 
   } 
    from '../configs/constants';
+import { LanguageContext } from '../helpers/LanguageContext';
 
 const apiUrl = `${BACKEND_API_BASE_URL}${AUTHENTICATION_ENDPOINT}`;
+
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
+  const { language, setLanguage } = useContext(LanguageContext);
 
   const nav = useNavigate(); 
 
@@ -54,11 +58,16 @@ function Login() {
       });
   };
 
+  const toggleLanguage = () => {
+    setLanguage((prevLanguage) => (prevLanguage === 'en' ? 'cn' : 'en'));
+  };
+
   return (
     <div style={{ textAlign: 'center' }}>
-      <h2>Login</h2>
+      <Button onClick={toggleLanguage}>{TRANSLATIONS[language].toggle}</Button>
+      <h2>{TRANSLATIONS[language].login}</h2>
       <TextField
-        label="Username"
+        label={TRANSLATIONS[language].username}
         variant="outlined"
         fullWidth
         value={username}
@@ -67,7 +76,7 @@ function Login() {
       />
       <br />
       <TextField
-        label="Password"
+        label={TRANSLATIONS[language].password}
         variant="outlined"
         type="password"
         fullWidth
@@ -77,7 +86,7 @@ function Login() {
       />
       <br />
       <Button variant="contained" color="primary" onClick={handleLogin}>
-        Login
+        {TRANSLATIONS[language].login}
       </Button>
       {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
